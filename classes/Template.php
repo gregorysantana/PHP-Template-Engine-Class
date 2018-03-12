@@ -18,7 +18,7 @@ Class Template{
 	private $keys = [];
 
 	//value for template data
-	private $values = [];
+	private $Values = [];
 	
 	/**
 	 * __construct
@@ -41,7 +41,15 @@ Class Template{
 	 */		
 	private function SetFile($file){
 
-		$this->file = $file;
+		if(file_exists($file)){
+
+			$this->file = $file;
+
+		}else{
+
+			return false;
+
+		}
 
 	}
 	/**
@@ -61,7 +69,7 @@ Class Template{
 
 				$this->keys = $keys;
 
-				$this->values = $value;
+				$this->Values = $value;
 
 
 		}else{
@@ -77,11 +85,30 @@ Class Template{
 	 * @return raw-data
 	 */			
 	public function FetchFile(){
+		if(self::IsFile()){
 
-		return file_get_contents( $this->file );
+			return file_get_contents( $this->file );
+		}else{
+
+			return false;
+
+		}	
 
 	}
-	
+	public function IsFile(){
+
+		if(file_exists($this->file)){
+
+			return true;
+
+		}else{
+
+			return false;
+
+		}
+
+
+	}	
 	/**
 	 * Rander template
 	*
@@ -95,13 +122,15 @@ Class Template{
 
 		$CountValues = count($this->Values);
 
-		if($CountKeys === $CountValues){
-			
+		if($CountKeys === $CountValues && self::IsFile()){
+
+			$counter = $CountKeys = $CountValues;
+
 			for ( $i = 0; $i<$counter; $i++){
 
 				$keys = $this->keys[$i];
 
-				$values = $this->values[$i];
+				$values = $this->Values[$i];
 
 				$tag = "{% $keys %}";
 
