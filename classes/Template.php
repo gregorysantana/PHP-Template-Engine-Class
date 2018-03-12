@@ -95,6 +95,12 @@ Class Template{
 		}	
 
 	}
+
+	/**
+	 * Check file exists or not
+	*
+	 * @return boolean
+	 */	
 	public function IsFile(){
 
 		if(file_exists($this->file)){
