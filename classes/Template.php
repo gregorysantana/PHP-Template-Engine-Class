@@ -91,21 +91,33 @@ Class Template{
 
 		$file = self::FetchFile();
 
-		$counter = count($this->keys);
+		$CountKeys = count($this->keys);
 
-		for ( $i = 0; $i<$counter; $i++){
+		$CountValues = count($this->Values);
 
-			$keys = $this->keys[$i];
-
-			$values = $this->values[$i];
-
-			$tag = "{% $keys %}";
-
-			$pattern = "/$tag/";
-
-			$file =  preg_replace("/$tag/", $values, $file);
+		if($CountKeys === $CountValues){
 			
+			for ( $i = 0; $i<$counter; $i++){
+
+				$keys = $this->keys[$i];
+
+				$values = $this->values[$i];
+
+				$tag = "{% $keys %}";
+
+				$pattern = "/$tag/";
+
+				$file =  preg_replace("/$tag/", $values, $file);
+				
+			}
+
+			return $file;	
+
+		}else{
+
+			return false;
+
 		}
-		return $file;
+
 	}		
 }
