@@ -1,9 +1,9 @@
 <?php
 require_once "classes/Template.php";
 
-$theme = new Template("tamplet.html");
+$theme = new Template;
 
-$theme->SetAttributes([
+echo $theme->SetTemplate("tamplet.html",[
 
     'header' => 'PHP Tamplet engine',
 
@@ -14,7 +14,6 @@ $theme->SetAttributes([
 ]);
 
 
-echo $theme->Rander();
 
 function  welcome(){
 

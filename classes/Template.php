@@ -21,18 +21,6 @@ Class Template{
 	private $Values = [];
 	
 	/**
-	 * __construct
-	*
-	* @param $arrays
-	*
-	 * @return booleans
-	 */	
-	public function __construct($file){
-
-		self::SetFile($file);
-
-	}
-	/**
 	 * Set file
 	*
 	* @param $file name of files
@@ -59,7 +47,17 @@ Class Template{
 	*
 	 * @return booleans
 	 */			
-	public function SetAttributes($params){
+	public function SetTemplate($file,$params){
+
+		if(!empty($file)){
+
+			self::SetFile($file);
+
+		}else{
+
+			return false;
+
+		}
 
 		if(is_array($params)){
 
@@ -71,6 +69,7 @@ Class Template{
 
 				$this->Values = $value;
 
+				return self::Rander();
 
 		}else{
 
@@ -88,6 +87,7 @@ Class Template{
 		if(self::IsFile()){
 
 			return file_get_contents( $this->file );
+			
 		}else{
 
 			return false;
