@@ -1,158 +1,131 @@
 <?php
-	/**
-	 * PHP Template Engine Class
-	 *
-	 * @author   Malik Umer Farooq <lablnet01@gmail.com>
-	 * @author-profile https://www.facebook.com/malikumerfarooq01/
-	 * @license MIT 
-	 *
-	 * **NOTE**
-	 * -This Class requires that ini file setting for fopen be set to true
-	 */
-Class Template{
+/**
+ * PHP Template Engine Class.
+ *
+ * @author   Malik Umer Farooq <lablnet01@gmail.com>
+ * @author-profile https://www.facebook.com/malikumerfarooq01/
+ *
+ * @license MIT
+ *
+ * **NOTE**
+ * -This Class requires that ini file setting for fopen be set to true
+ */
+class Template
+{
+    //file
+    private $file;
 
-	//file
-	private $file;
+    //key for template data
+    private $keys = [];
 
-	//key for template data
-	private $keys = [];
+    //value for template data
+    private $Values = [];
 
-	//value for template data
-	private $Values = [];
-	
-	/**
-	 * Set file
-	*
-	* @param $file name of files
-	*
-	 * @return void
-	 */		
-	private function SetFile($file){
+    /**
+     * Set file.
+     *
+     * @param $file name of files
+     *
+     * @return void
+     */
+    private function SetFile($file)
+    {
+        if (file_exists($file)) {
+            $this->file = $file;
+        } else {
+            return false;
+        }
+    }
 
-		if(file_exists($file)){
+    /**
+     * Set attributes for template.
+     *
+     * @param $arrays
+     *
+     * @return booleans
+     */
+    public function SetTemplate($file, $params)
+    {
+        if (!empty($file)) {
+            self::SetFile($file);
+        } else {
+            return false;
+        }
 
-			$this->file = $file;
+        if (is_array($params)) {
+            $keys = array_keys($params);
 
-		}else{
+            $value = array_values($params);
 
-			return false;
+            $this->keys = $keys;
 
-		}
+            $this->Values = $value;
 
-	}
-	/**
-	 * Set attributes for template
-	*
-	* @param $arrays
-	*
-	 * @return booleans
-	 */			
-	public function SetTemplate($file,$params){
+            return self::Rander();
+        } else {
+            return false;
+        }
+    }
 
-		if(!empty($file)){
+    /**
+     * Get content form file.
+     *
+     * @return raw-data
+     */
+    public function FetchFile()
+    {
+        if (self::IsFile()) {
+            return file_get_contents($this->file);
+        } else {
+            return false;
+        }
+    }
 
-			self::SetFile($file);
+    /**
+     * Check file exists or not.
+     *
+     * @return bool
+     */
+    public function IsFile()
+    {
+        if (file_exists($this->file)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-		}else{
+    /**
+     * Rander template.
+     *
+     * @return raw-data
+     */
+    public function Rander()
+    {
+        $file = self::FetchFile();
 
-			return false;
+        $CountKeys = count($this->keys);
 
-		}
+        $CountValues = count($this->Values);
 
-		if(is_array($params)){
+        if ($CountKeys === $CountValues && self::IsFile()) {
+            $counter = $CountKeys = $CountValues;
 
-				$keys = array_keys($params);
+            for ($i = 0; $i < $counter; $i++) {
+                $keys = $this->keys[$i];
 
-				$value = array_values($params);
+                $values = $this->Values[$i];
 
-				$this->keys = $keys;
+                $tag = "{% $keys %}";
 
-				$this->Values = $value;
+                $pattern = "/$tag/";
 
-				return self::Rander();
+                $file = preg_replace("/$tag/", $values, $file);
+            }
 
-		}else{
-
-			return false;
-
-		}
-	}
-		
-	/**
-	 * Get content form file
-	*
-	 * @return raw-data
-	 */			
-	public function FetchFile(){
-		if(self::IsFile()){
-
-			return file_get_contents( $this->file );
-			
-		}else{
-
-			return false;
-
-		}	
-
-	}
-
-	/**
-	 * Check file exists or not
-	*
-	 * @return boolean
-	 */	
-	public function IsFile(){
-
-		if(file_exists($this->file)){
-
-			return true;
-
-		}else{
-
-			return false;
-
-		}
-
-
-	}	
-	/**
-	 * Rander template
-	*
-	 * @return raw-data
-	 */		
-	public function Rander(){
-
-		$file = self::FetchFile();
-
-		$CountKeys = count($this->keys);
-
-		$CountValues = count($this->Values);
-
-		if($CountKeys === $CountValues && self::IsFile()){
-
-			$counter = $CountKeys = $CountValues;
-
-			for ( $i = 0; $i<$counter; $i++){
-
-				$keys = $this->keys[$i];
-
-				$values = $this->Values[$i];
-
-				$tag = "{% $keys %}";
-
-				$pattern = "/$tag/";
-
-				$file =  preg_replace("/$tag/", $values, $file);
-				
-			}
-
-			return $file;	
-
-		}else{
-
-			return false;
-
-		}
-
-	}		
+            return $file;
+        } else {
+            return false;
+        }
+    }
 }

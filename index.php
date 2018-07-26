@@ -1,9 +1,10 @@
 <?php
-require_once "classes/Template.php";
 
-$theme = new Template;
+require_once 'classes/Template.php';
 
-echo $theme->SetTemplate("tamplet.html",[
+$theme = new Template();
+
+echo $theme->SetTemplate('tamplet.html', [
 
     'header' => 'PHP Tamplet engine',
 
@@ -13,16 +14,12 @@ echo $theme->SetTemplate("tamplet.html",[
 
 ]);
 
-
-
-function  welcome(){
-
-    return "WELCOME";
-
+function welcome()
+{
+    return 'WELCOME';
 }
 
-function body(){
-
-    return "Hay this is created by malik umer farooq";
-
+function body()
+{
+    return 'Hay this is created by malik umer farooq';
 }
